@@ -383,6 +383,9 @@ class MusicService :
     private var discordUpdateJob: kotlinx.coroutines.Job? = null
     private var matrixUpdateJob: kotlinx.coroutines.Job? = null
 
+    private val matrixJsonConfig = Json { ignoreUnknownKeys = true }
+
+    // MediaSession components
     private var scrobbleManager: ScrobbleManager? = null
 
     val automixItems = MutableStateFlow<List<MediaItem>>(emptyList())
@@ -858,7 +861,7 @@ class MusicService :
 
                 if (matrixEnabled) {
                     val accounts = try {
-                        Json { ignoreUnknownKeys = true }.decodeFromString<List<MatrixAccount>>(accountsJson)
+                        matrixJsonConfig.decodeFromString<List<MatrixAccount>>(accountsJson)
                     } catch (e: Exception) {
                         emptyList()
                     }
