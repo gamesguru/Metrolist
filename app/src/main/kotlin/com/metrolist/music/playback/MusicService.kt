@@ -421,7 +421,12 @@ class MusicService :
                     if (!player.isPlaying) {
                         scope.launch(Dispatchers.IO) {
                             discordRpc?.closeRPC()
-                            matrixRpcClients.forEach { it.close() }
+                            val job = matrixUpdateJob
+                            if (job != null && job.isActive) {
+                                job.cancel()
+                                job.join()
+                            }
+                            matrixRpcClients.toList().forEach { it.close() }
                         }
                     }
                 }
@@ -2285,7 +2290,12 @@ class MusicService :
             ) {
                 scope.launch {
                     discordRpc?.close()
-                    matrixRpcClients.forEach { it.close() }
+                    val job = matrixUpdateJob
+                    if (job != null && job.isActive) {
+                        job.cancel()
+                        job.join()
+                    }
+                    matrixRpcClients.toList().forEach { it.close() }
                 }
             }
         }
@@ -2949,7 +2959,8 @@ class MusicService :
         val statusFormat = dataStore.get(MatrixStatusFormatKey, "")
         matrixUpdateJob?.cancel()
         matrixUpdateJob = scope.launch {
-            matrixRpcClients.forEach { client ->
+            val clients = matrixRpcClients.toList()
+            clients.forEach { client ->
                 client.updateSong(song, statusFormat).onFailure {
                     Timber.tag(TAG).w(it, "Matrix RPC update failed")
                 }

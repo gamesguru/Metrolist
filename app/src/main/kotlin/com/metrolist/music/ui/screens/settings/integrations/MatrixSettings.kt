@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.only
@@ -41,6 +42,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -75,7 +78,7 @@ fun MatrixAccountDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(if (initialAccount == null) "Add Account" else "Edit Account") },
+        title = { Text(if (initialAccount == null) stringResource(R.string.matrix_add_account) else stringResource(R.string.matrix_edit_account)) },
         text = {
             Column {
                 OutlinedTextField(
@@ -100,7 +103,10 @@ fun MatrixAccountDialog(
                     value = accessToken,
                     onValueChange = { accessToken = it },
                     label = { Text(stringResource(R.string.matrix_access_token)) },
+                    placeholder = { Text(stringResource(R.string.matrix_access_token_hint)) },
                     singleLine = true,
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(autoCorrectEnabled = false, keyboardType = KeyboardType.Password),
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -116,18 +122,18 @@ fun MatrixAccountDialog(
                     onSave(MatrixAccount(normalizedHomeserver, userId.trim(), accessToken.trim()))
                 }
             ) {
-                Text("Save")
+                Text(stringResource(R.string.matrix_account_save))
             }
         },
         dismissButton = {
             Row {
                 if (onDelete != null) {
                     TextButton(onClick = onDelete) {
-                        Text("Delete", color = MaterialTheme.colorScheme.error)
+                        Text(stringResource(R.string.matrix_account_delete), color = MaterialTheme.colorScheme.error)
                     }
                 }
                 TextButton(onClick = onDismiss) {
-                    Text("Cancel")
+                    Text(stringResource(R.string.matrix_account_cancel))
                 }
             }
         }
@@ -254,7 +260,7 @@ fun MatrixSettings(
         if (accounts.size < 3) {
             accountItems.add(
                 Material3SettingsItem(
-                    title = { Text("Add Account") },
+                    title = { Text(stringResource(R.string.matrix_add_account)) },
                     onClick = { isAdding = true }
                 )
             )
