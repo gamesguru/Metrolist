@@ -751,6 +751,23 @@
     <string name="recently_converted">Recently converted</string>
     <string name="column_label">Column %d</string>
 
+    <!-- Matrix Integration -->
+    <string name="matrix_integration">Matrix integration</string>
+    <string name="enable_matrix_rpc">Enable Matrix presence</string>
+    <string name="matrix_homeserver">Homeserver URL</string>
+    <string name="matrix_homeserver_hint">e.g. https://matrix.org</string>
+    <string name="matrix_homeserver_placeholder">https://matrix.server.domain</string>
+    <string name="matrix_user_id">User ID</string>
+    <string name="matrix_user_id_hint">e.g. @user:matrix.org</string>
+    <string name="matrix_user_id_placeholder">@user:server.domain</string>
+    <string name="matrix_access_token">Access Token</string>
+    <string name="matrix_access_token_hint">Your Matrix access token</string>
+    <string name="matrix_status_format">Status format</string>
+    <string name="matrix_status_format_description">Variables: {song_name}, {artist_name}, {album_name}</string>
+    <string name="matrix_status_format_default">Listening to: {song_name} by {artist_name} | Metrolist Android</string>
+    <string name="matrix_status_format_hint">e.g. Listening to {song_name}</string>
+    <string name="matrix_information_warning">This feature updates your Matrix presence using the standard Client-Server API. Your access token is stored locally and sent only to your specified homeserver.</string>
+
     <!-- Discord Integration -->
     <string name="discord_status">Status</string>
     <string name="discord_status_online">Online</string>
