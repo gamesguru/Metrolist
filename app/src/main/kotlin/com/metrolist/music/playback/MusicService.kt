@@ -932,7 +932,7 @@ class MusicService :
                     }
                 }
                 // Trigger update/clear based on current state
-                if (dataStore.get(EnableMatrixRPCKey, false) == true) {
+                if (dataStore.get(EnableMatrixRPCKey, false)) {
                     updateMatrixRPC(currentSong.value)
                 } else {
                     clearMatrixRPC()
@@ -3310,7 +3310,7 @@ class MusicService :
         val current = song ?: currentSong.value ?: return
 
         // IMMEDIATE GATE: If presence is disabled, clear once and stop everything.
-        if (dataStore.get(EnableMatrixRPCKey, false) != true) {
+        if (!dataStore.get(EnableMatrixRPCKey, false)) {
             clearMatrixRPC()
             return
         }
@@ -3321,7 +3321,7 @@ class MusicService :
             delay(1000)
 
             // RE-CHECK AFTER DELAY: Just in case it was disabled during the 1s wait.
-            if (dataStore.get(EnableMatrixRPCKey, false) != true) {
+            if (!dataStore.get(EnableMatrixRPCKey, false)) {
                 clearMatrixRPC()
                 return@launch
             }

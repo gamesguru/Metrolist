@@ -8,6 +8,7 @@ package com.metrolist.music.utils
 import com.metrolist.music.db.entities.Song
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.concurrent.TimeUnit
 import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -16,7 +17,11 @@ import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONObject
 import timber.log.Timber
 
-private val sharedOkHttpClient: OkHttpClient = OkHttpClient()
+private val sharedOkHttpClient: OkHttpClient = OkHttpClient.Builder()
+    .connectTimeout(30, TimeUnit.SECONDS)
+    .readTimeout(60, TimeUnit.SECONDS)
+    .writeTimeout(30, TimeUnit.SECONDS)
+    .build()
 
 /**
  * Handles Matrix Rich Presence (RPC) updates by setting the user's presence status

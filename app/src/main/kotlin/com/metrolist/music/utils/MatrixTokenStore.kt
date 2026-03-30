@@ -7,9 +7,9 @@ package com.metrolist.music.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
+import timber.log.Timber
 
 object MatrixTokenStore {
     private const val PREFS_FILE = "matrix_tokens"
@@ -45,7 +45,7 @@ object MatrixTokenStore {
                     prefs = created
                     created
                 } catch (e: Exception) {
-                    Log.e(TAG, "Failed to initialize EncryptedSharedPreferences", e)
+                    Timber.tag(TAG).e(e, "Failed to initialize EncryptedSharedPreferences")
                     null
                 }
             }
@@ -59,7 +59,7 @@ object MatrixTokenStore {
     fun saveToken(context: Context, homeserver: String, userId: String, token: String) {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
-            Log.w(TAG, "saveToken: encrypted storage unavailable, token not persisted")
+            Timber.tag(TAG).w("saveToken: encrypted storage unavailable, token not persisted")
             return
         }
         sharedPrefs.edit().putString(createKey(homeserver, userId), token).apply()
@@ -68,7 +68,7 @@ object MatrixTokenStore {
     fun getToken(context: Context, homeserver: String, userId: String): String? {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
-            Log.w(TAG, "getToken: encrypted storage unavailable, returning null")
+            Timber.tag(TAG).w("getToken: encrypted storage unavailable, returning null")
             return null
         }
         return sharedPrefs.getString(createKey(homeserver, userId), null)
@@ -77,7 +77,7 @@ object MatrixTokenStore {
     fun removeToken(context: Context, homeserver: String, userId: String) {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
-            Log.w(TAG, "removeToken: encrypted storage unavailable, nothing to remove")
+            Timber.tag(TAG).w("removeToken: encrypted storage unavailable, nothing to remove")
             return
         }
         sharedPrefs.edit().remove(createKey(homeserver, userId)).apply()
