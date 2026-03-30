@@ -72,6 +72,16 @@ import timber.log.Timber
 
 val matrixJsonSerializer = Json { ignoreUnknownKeys = true }
 
+/**
+ * A dialog for adding or editing a Matrix account.
+ * Handles validation for blank fields and displays error messages.
+ *
+ * @param initialAccount The account metadata to pre-fill, or null for a new account.
+ * @param error A validation error message to display, if any.
+ * @param onDismiss Callback when the dialog is dismissed.
+ * @param onSave Callback when the account is saved, providing the account metadata and access token.
+ * @param onDelete Optional callback when the account is deleted (only shown for existing accounts).
+ */
 @Composable
 fun MatrixAccountDialog(
     initialAccount: MatrixAccount?,
@@ -180,6 +190,13 @@ fun MatrixAccountDialog(
     )
 }
 
+/**
+ * Settings screen for configuring Matrix integration.
+ * Allows users to enable Matrix RPC, manage multiple Matrix accounts,
+ * and customize the status message format and update interval.
+ *
+ * @param navController Navigation controller for navigating between screens.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MatrixSettings(

@@ -11,6 +11,10 @@ import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKey
 import timber.log.Timber
 
+/**
+ * Secure store for Matrix access tokens using [EncryptedSharedPreferences].
+ * This ensures that sensitive credentials are not stored in plaintext on the device.
+ */
 object MatrixTokenStore {
     private const val PREFS_FILE = "matrix_tokens"
     private const val TAG = "MatrixTokenStore"
@@ -18,6 +22,12 @@ object MatrixTokenStore {
     @Volatile
     private var prefs: SharedPreferences? = null
 
+    /**
+     * Retrieves or initializes the [EncryptedSharedPreferences] instance.
+     *
+     * @param context The context used to access shared preferences.
+     * @return The [SharedPreferences] instance, or null if initialization fails.
+     */
     private fun getPrefs(context: Context): SharedPreferences? {
         val cached = prefs
         if (cached != null) {
@@ -52,10 +62,25 @@ object MatrixTokenStore {
         }
     }
 
+    /**
+     * Generates a unique key for a Matrix account based on its homeserver and user ID.
+     *
+     * @param homeserver The Matrix homeserver URL.
+     * @param userId The Matrix user ID.
+     * @return A unique string key for storage.
+     */
     private fun createKey(homeserver: String, userId: String): String {
         return "${homeserver.length}:$homeserver|${userId.length}:$userId"
     }
 
+    /**
+     * Securely saves a Matrix access token for the specified account.
+     *
+     * @param context The context used to access shared preferences.
+     * @param homeserver The Matrix homeserver URL.
+     * @param userId The Matrix user ID.
+     * @param token The access token to save.
+     */
     fun saveToken(context: Context, homeserver: String, userId: String, token: String) {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
@@ -65,6 +90,14 @@ object MatrixTokenStore {
         sharedPrefs.edit().putString(createKey(homeserver, userId), token).apply()
     }
 
+    /**
+     * Retrieves the saved Matrix access token for the specified account.
+     *
+     * @param context The context used to access shared preferences.
+     * @param homeserver The Matrix homeserver URL.
+     * @param userId The Matrix user ID.
+     * @return The access token if found, or null otherwise.
+     */
     fun getToken(context: Context, homeserver: String, userId: String): String? {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
@@ -74,6 +107,13 @@ object MatrixTokenStore {
         return sharedPrefs.getString(createKey(homeserver, userId), null)
     }
 
+    /**
+     * Removes the saved Matrix access token for the specified account.
+     *
+     * @param context The context used to access shared preferences.
+     * @param homeserver The Matrix homeserver URL.
+     * @param userId The Matrix user ID.
+     */
     fun removeToken(context: Context, homeserver: String, userId: String) {
         val sharedPrefs = getPrefs(context)
         if (sharedPrefs == null) {
