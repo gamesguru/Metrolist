@@ -3367,7 +3367,7 @@ class MusicService :
         matrixUpdateJob?.cancel()
         matrixUpdateJob = scope.launch {
             var count = 0
-            matrixRpcUpdateMutex.withLock {
+            val clientsToClear = matrixRpcUpdateMutex.withLock {
                 matrixRpcClientsMutex.withLock {
                     if (matrixRpcClients.isEmpty()) {
                         // Always attempt to load accounts when clearing, even if disabled
@@ -3395,10 +3395,12 @@ class MusicService :
                         }
                     }
 
-                    matrixRpcClients.forEach { it.clearStatus() }
-                    count = matrixRpcClients.size
+                    matrixRpcClients.toList()
                 }
             }
+
+            count = clientsToClear.size
+            clientsToClear.forEach { it.clearStatus() }
 
             if (showToast && count > 0) {
                 matrixToastJob?.cancel()
