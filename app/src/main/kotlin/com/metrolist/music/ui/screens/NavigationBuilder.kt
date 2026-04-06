@@ -60,6 +60,7 @@ import com.metrolist.music.ui.screens.settings.integrations.DiscordSettings
 import com.metrolist.music.ui.screens.settings.integrations.IntegrationScreen
 import com.metrolist.music.ui.screens.settings.integrations.LastFMSettings
 import com.metrolist.music.ui.screens.settings.integrations.ListenTogetherSettings
+import com.metrolist.music.ui.screens.settings.integrations.MatrixSettings
 import com.metrolist.music.ui.screens.wrapped.WrappedScreen
 import com.metrolist.music.utils.rememberEnumPreference
 import com.metrolist.music.utils.rememberPreference
@@ -393,6 +394,10 @@ fun NavGraphBuilder.navigationBuilder(
         DiscordSettings(navController, snackbarHostState)
     }
 
+    composable("settings/integrations/matrix") {
+        MatrixSettings(navController)
+    }
+
     composable("settings/integrations/lastfm") {
         LastFMSettings(navController)
     }
@@ -410,7 +415,7 @@ fun NavGraphBuilder.navigationBuilder(
     }
 
     composable("settings/about") {
-        AboutScreen(navController, scrollBehavior)
+        AboutScreen(navController)
     }
 
     composable("login") {
